@@ -27,7 +27,7 @@ class App(tk.Frame):
         b1 = Btn(
             self.parent,
             command=self.installAPK,
-            text='Install ADB',
+            text='Install APK',
         )
 
         b2 = Btn(
