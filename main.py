@@ -5,6 +5,7 @@ from tkinter import messagebox as mb
 import os
 import urllib3
 import subprocess
+import requests
 
 class Btn(tk.Button):
     def __init__(self, *args, **kwargs):
@@ -96,6 +97,10 @@ class App(tk.Frame):
             mb.showinfo('OK', 'Successfully installed ' + path)
         else:
             mb.showwarning('OK', p)
+    
+    # def downloadAppx(self):
+    #     purl = 'https://www.microsoft.com/store/productId/9P3395VX91NR'
+
 
 if __name__ == '__main__':
     WIDTH = 400
