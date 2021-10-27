@@ -126,9 +126,9 @@ class App(tk.Frame):
         abspath = os.path.abspath('wsa.msixbundle')
         if text.endswith('.msixbundle'):
             url = url.split('"')[-1]
-#        with requests.get(url, stream=True) as r:
-#            with open(abspath, 'wb') as f:
-#                shutil.copyfileobj(r.raw, f)
+        with requests.get(url, stream=True) as r:
+            with open(abspath, 'wb') as f:
+                shutil.copyfileobj(r.raw, f)
         self.status.set('Successfully Downloaded , installing')
         self.parent.update()
         os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
