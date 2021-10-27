@@ -9,6 +9,6 @@ note:
 
 # TODO:
 
-[x] install wsa button for windows 11 stable-dev
-[ ] install gapp
-[ ] file management
+- [x] install wsa button for windows 11 stable-dev
+- [ ] install gapp
+- [ ] file management
