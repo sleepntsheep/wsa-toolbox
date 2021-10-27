@@ -6,6 +6,6 @@ note: you should install adb first
 
 # TODO:
 
-[ ] install wsa button for windows 11 stable-dev
+[x] install wsa button for windows 11 stable-dev
 [ ] install gapp
 [ ] file management
