@@ -75,6 +75,7 @@ class App(tk.Frame):
             initialdir='HOME',
             filetypes=[('Android Package', '*.apk')]
         )
+        path = path.replace(' ', '\ ')
         print(path)
         subprocess.call(('adb disconnect'))
         subprocess.call(('adb connect 127.0.0.1:58526'))
@@ -100,7 +101,7 @@ class App(tk.Frame):
         self.status.set('Finished installing '+name)
         
     def apk(self, path):
-        p = subprocess.getoutput('adb install "'+path+'"')
+        p = subprocess.getoutput('adb install '+path)
         if 'Package com.aurora.store signatures do not match previously installed version; ignoring!]' in p:
             mb.showwarning('OK', 'Error: signatures do not match previously installed version, try again!')
         elif 'Success' in p:
