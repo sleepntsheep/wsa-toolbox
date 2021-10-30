@@ -40,14 +40,14 @@ class App(tk.Frame):
     
         b3 = Btn(
             self.parent,
-            text='Install aurora store (google play alternative)',
+            text='Install aurora store (play store alternative)',
             command=lambda: self.installURL('https://files.auroraoss.com/AuroraStore/Stable/AuroraStore_4.0.7.apk', name='AuroraStore')
         )
     
         b4 = Btn(
             self.parent,
-            text='Lawnchair Launcher',
-            command=lambda: self.installURL('https://www.apkmirror.com/wp-content/uploads/2021/02/15/60340e66272f7/ch.deletescape.lawnchair.ci_9.1_Alpha_3-9012942_minAPI21(arm64-v8a,armeabi-v7a,x86,x86_64)(nodpi)_apkmirror.com.apk?verify=1635584656-NL3vp38nggmOJpBvXe5Zt_ypjH80UiMqi7Q6m3S7z-Y', name='LawnchairLauncher')
+            text='F-Droid store',
+            command=lambda: self.installURL('https://f-droid.org/F-Droid.apk', name='FDroid')
         )
 
 
@@ -92,6 +92,8 @@ class App(tk.Frame):
 
     def installURL(self, link, name='app'):
         global adbpath
+        if os.path.exists(f'./{name}.apk'):
+            os.remove(f'./{name}.apk')
         subprocess.call((f'{adbpath} disconnect'), shell=True)
         subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
 
