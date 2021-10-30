@@ -1,5 +1,5 @@
 *.apk
-*.spec
+*.msixbundle
 dist
 build
 __pycache__

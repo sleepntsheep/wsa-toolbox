@@ -120,7 +120,6 @@ class App(tk.Frame):
         )
         if not answer:
             return
-        self.updatestatus('Downloading MSIXBUNDLE, do not inturrupt or close the program')
         purl = 'https://www.microsoft.com/store/productId/9P3395VX91NR'
         apiurl = 'https://store.rg-adguard.net/api/GetFiles'
         r = requests.post(apiurl, data={
@@ -134,7 +133,7 @@ class App(tk.Frame):
         text = regex.group(2)
         if text.endswith('.msixbundle'):
             url = url.split('"')[-1]
-        self.updatestatus('Downloading msixbundle')
+        self.updatestatus('Downloading, windows not responding is normal. Please wait')
         download(url, 'wsa.msixbundle')
         self.updatestatus('Successfully Downloaded , installing')
         os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
