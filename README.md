@@ -1,4 +1,4 @@
-#<div align=center>WSA Toolbox</div>
+<div align=center># WSA Toolbox</div>
 
 usage: download and run main.exe in releases, it might take a while to start
 
