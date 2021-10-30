@@ -46,7 +46,7 @@ class App(tk.Frame):
     
         b4 = Btn(
             self.parent,
-            text='F-Droid store',
+            text='Installing F-Droid store',
             command=lambda: self.installURL('https://f-droid.org/F-Droid.apk', name='FDroid')
         )
 
@@ -77,36 +77,34 @@ class App(tk.Frame):
             initialdir='HOME',
             filetypes=[('Android Package', '*.apk')]
         )
-        print(path)
-        subprocess.call((f'{adbpath} disconnect'), shell=True)
-        subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
+        self.updatestatus('Installing APK')
         self.apk(path)
-        self.status.set('Finished Installing APK')
+        self.updatestatus('Finished Installing APK')
 
     def adbShell(self):
         global adbpath
         subprocess.call((f'{adbpath} disconnect'), shell=True)
         subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
         os.system(f'start cmd /k {adbpath} shell')
-        self.status.set('Finished opening adb shell')
+        self.updatestatus('Opened adb shell')
 
     def installURL(self, link, name='app'):
         global adbpath
         if os.path.exists(f'./{name}.apk'):
             os.remove(f'./{name}.apk')
-        subprocess.call((f'{adbpath} disconnect'), shell=True)
-        subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
-
-        with urllib3.PoolManager() as http:
-            r = http.request('GET', link)
-            with open(name+'.apk', 'wb') as f:
-                f.write(r.data)
-
+        self.updatestatus('Downloading apk')
+        download(link, name+'.apk')
+        self.updatestatus('Downloaded apk, installing')
         self.apk(name+'.apk')
-        self.status.set('Finished installing '+name)
+        self.updatestatus('Finished installing '+name)
         
     def apk(self, path):
         global adbpath
+        subprocess.call((f'{adbpath} disconnect'), shell=True)
+        c = subprocess.getoutput(f'{adbpath} connect 127.0.0.1:58526')
+        if 'unable to connect' in c:
+            mb.showerror('OK', 'Unable to connect, enable developer mode and run WSA if you haven\'t')
+            return self.updatestatus('Failed: make sure you opened WSA')
         p = subprocess.getoutput(f'{adbpath} install "'+path+'"')
         if 'Package com.aurora.store signatures do not match previously installed version; ignoring!]' in p:
             mb.showwarning('OK', 'Error: signatures do not match previously installed version, try again!')
@@ -116,8 +114,13 @@ class App(tk.Frame):
             mb.showwarning('OK', p)
     
     def installWSL(self):
-        self.status.set('Downloading MSIXBUNDLE, do not inturrupt or close the program')
-        self.parent.update()
+        answer = tk.messagebox.askokcancel(
+            title = 'Confirmation',
+            message = 'Make sure you ran this application as adminastrator',
+        )
+        if not answer:
+            return
+        self.updatestatus('Downloading MSIXBUNDLE, do not inturrupt or close the program')
         purl = 'https://www.microsoft.com/store/productId/9P3395VX91NR'
         apiurl = 'https://store.rg-adguard.net/api/GetFiles'
         r = requests.post(apiurl, data={
@@ -129,22 +132,29 @@ class App(tk.Frame):
         regex = re.search('\)\"><td><a href=\"(.*)\" rel=\"\w{10}\">(.*\.msixbundle)</a></td>', str(r.content))
         url = regex.group(1)
         text = regex.group(2)
-        abspath = os.path.abspath('wsa.msixbundle')
         if text.endswith('.msixbundle'):
             url = url.split('"')[-1]
-        with requests.get(url, stream=True) as r:
-            with open(abspath, 'wb') as f:
-                shutil.copyfileobj(r.raw, f)
-        self.status.set('Successfully Downloaded , installing')
-        self.parent.update()
+        self.updatestatus('Downloading msixbundle')
+        download(url, 'wsa.msixbundle')
+        self.updatestatus('Successfully Downloaded , installing')
         os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
-        self.status.set('Installed WSA')
+        self.updatestatus('Installed WSA')
+    
+    def updatestatus(self, text):
+        self.status.set(text)
+        self.parent.update()
+
+def download(url, filename):
+    with requests.get(url, stream=True) as r:
+        with open(os.path.abspath(filename), 'wb') as f:
+            shutil.copyfileobj(r.raw, f)
+
 
 def resource_path(relative_path):
-        if hasattr(sys, '_MEIPASS'):
-                return os.path.join(sys._MEIPASS, relative_path)
-        else:
-                return os.path.join(os.path.abspath("."), relative_path)
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    else:
+        return os.path.join(os.path.abspath("."), relative_path)
 
 
 if __name__ == '__main__':
