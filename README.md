@@ -6,6 +6,6 @@ GUIDE: download and run main.exe in releases, it might take a while to start
 
 # TODO:
 
-[x] install wsa button for windows 11 stable-dev
-[ ] install gapp
-[ ] file management
+- [x] install wsa button for windows 11 stable-dev
+- [ ] install gapp
+- [ ] file management
