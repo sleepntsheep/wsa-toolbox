@@ -138,6 +138,7 @@ class App(tk.Frame):
         self.updatestatus('Successfully Downloaded , installing')
         os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
         self.updatestatus('Installed WSA')
+        tk.messagebox.info('You need to enable Virtualization in bios to use WSA!')
     
     def updatestatus(self, text):
         self.status.set(text)
