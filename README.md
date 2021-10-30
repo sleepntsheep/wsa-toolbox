@@ -1,6 +1,9 @@
-﻿# wsatoolbox (WIP)
+#<div align=center>WSA Toolbox</div>
 
-GUIDE: download and run main.exe in releases, it might take a while to start
+usage: download and run main.exe in releases, it might take a while to start
+
+
+****
 
 ![demo](images/scr.png)
 
