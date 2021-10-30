@@ -1,5 +1,5 @@
-<div align=center markdown=1>
-# WSA Toolbox
+<div align=center>
+<h1>WSA Toolbox</h1>
 </div>
 
 usage: download and run main.exe in releases, it might take a while to start
