@@ -87,7 +87,7 @@ class App(tk.Frame):
         global adbpath
         subprocess.call((f'{adbpath} disconnect'), shell=True)
         subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
-        os.system('start cmd /k adb shell')
+        os.system(f'start cmd /k {adbpath} shell')
         self.status.set('Finished opening adb shell')
 
     def installURL(self, link, name='app'):
@@ -152,6 +152,8 @@ if __name__ == '__main__':
         adbpath = resource_path('./adb.exe')
     except :
         adbpath = resource_path('adb.exe')
+
+    adbpath = os.path.abspath(adbpath)
 
     root = tk.Tk()
     root.geometry(f'{WIDTH}x{HEIGHT}')
