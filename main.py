@@ -41,14 +41,15 @@ class App(tk.Frame):
         b3 = Btn(
             self.parent,
             text='Install aurora store (google play alternative)',
-            command=lambda: self.installURL('https://files.auroraoss.com/AuroraStore/Stable/AuroraStore_4.0.7.apk')
+            command=lambda: self.installURL('https://files.auroraoss.com/AuroraStore/Stable/AuroraStore_4.0.7.apk', name='AuroraStore')
         )
-
+    
         b4 = Btn(
             self.parent,
-            text='Install nova launcher',
-            command=lambda: self.installURL('https://d-06.winudf.com/b/APK/Y29tLnRlc2xhY29pbHN3LmxhdW5jaGVyXzcwMDQ5XzFmNmIzMmU0?_fn=Tm92YSBMYXVuY2hlcl92Ny4wLjQ5X2Fwa3B1cmUuY29tLmFwaw&_p=Y29tLnRlc2xhY29pbHN3LmxhdW5jaGVy&am=hlzF95rRCIyp1GC2U_qQJQ&at=1635264415&k=22dbdd2e93eef4c7ec34d2222783875361797920')
+            text='Lawnchair Launcher',
+            command=lambda: self.installURL('https://www.apkmirror.com/wp-content/uploads/2021/02/15/60340e66272f7/ch.deletescape.lawnchair.ci_9.1_Alpha_3-9012942_minAPI21(arm64-v8a,armeabi-v7a,x86,x86_64)(nodpi)_apkmirror.com.apk?verify=1635584656-NL3vp38nggmOJpBvXe5Zt_ypjH80UiMqi7Q6m3S7z-Y', name='LawnchairLauncher')
         )
+
 
         b5 = Btn(
             self.parent,
@@ -70,26 +71,29 @@ class App(tk.Frame):
             ).pack(side='bottom')
     
     def installAPK(self):
+        global adbpath
         path = fd.askopenfilename(
             title='Choose apk file',
             initialdir='HOME',
             filetypes=[('Android Package', '*.apk')]
         )
         print(path)
-        subprocess.call(('adb disconnect'))
-        subprocess.call(('adb connect 127.0.0.1:58526'))
+        subprocess.call((f'{adbpath} disconnect'), shell=True)
+        subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
         self.apk(path)
         self.status.set('Finished Installing APK')
 
     def adbShell(self):
-        subprocess.call(('adb disconnect'))
-        subprocess.call(('adb connect 127.0.0.1:58526'))
+        global adbpath
+        subprocess.call((f'{adbpath} disconnect'), shell=True)
+        subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
         os.system('start cmd /k adb shell')
         self.status.set('Finished opening adb shell')
 
     def installURL(self, link, name='app'):
-        subprocess.call(('adb disconnect'))
-        subprocess.call(('adb connect 127.0.0.1:58526'))
+        global adbpath
+        subprocess.call((f'{adbpath} disconnect'), shell=True)
+        subprocess.call((f'{adbpath} connect 127.0.0.1:58526'), shell=True)
 
         with urllib3.PoolManager() as http:
             r = http.request('GET', link)
@@ -100,7 +104,8 @@ class App(tk.Frame):
         self.status.set('Finished installing '+name)
         
     def apk(self, path):
-        p = subprocess.getoutput('adb install "'+path+'"')
+        global adbpath
+        p = subprocess.getoutput(f'{adbpath} install "'+path+'"')
         if 'Package com.aurora.store signatures do not match previously installed version; ignoring!]' in p:
             mb.showwarning('OK', 'Error: signatures do not match previously installed version, try again!')
         elif 'Success' in p:
@@ -133,9 +138,20 @@ class App(tk.Frame):
         os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
         self.status.set('Installed WSA')
 
+def resource_path(relative_path):
+        if hasattr(sys, '_MEIPASS'):
+                return os.path.join(sys._MEIPASS, relative_path)
+        else:
+                return os.path.join(os.path.abspath("."), relative_path)
+
+
 if __name__ == '__main__':
     WIDTH = 400
     HEIGHT = 500
+    try:
+        adbpath = resource_path('./adb.exe')
+    except :
+        adbpath = resource_path('adb.exe')
 
     root = tk.Tk()
     root.geometry(f'{WIDTH}x{HEIGHT}')

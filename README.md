@@ -2,9 +2,6 @@
 
 GUIDE: download and run main.exe in releases, it might take a while to start
 
-note: 
-- you need to have adb installed
-
 ![demo](images/scr.png)
 
 # TODO:

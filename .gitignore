@@ -1,5 +1,6 @@
-aurora.apk
+*.apk
+*.spec
 dist
 build
 __pycache__
-a.ps1
+venv
