@@ -2,8 +2,6 @@
 <h1>WSA Toolbox</h1>
 </div>
 
-****
-
 #### usage:
 download and run main.exe in releases, it might take a while to start
 
