@@ -37,13 +37,13 @@ class App(tk.Frame):
             text='Open ADB Shell',
             command=self.adbShell
         )
-    
+
         b3 = Btn(
             self.parent,
             text='Install aurora store (play store alternative)',
             command=lambda: self.installURL('https://files.auroraoss.com/AuroraStore/Stable/AuroraStore_4.0.7.apk', name='AuroraStore')
         )
-    
+
         b4 = Btn(
             self.parent,
             text='Installing F-Droid store',
@@ -69,7 +69,7 @@ class App(tk.Frame):
             width=60,
             height=2,
             ).pack(side='bottom')
-    
+
     def installAPK(self):
         global adbpath
         path = fd.askopenfilename(
@@ -97,7 +97,7 @@ class App(tk.Frame):
         self.updatestatus('Downloaded apk, installing')
         self.apk(name+'.apk')
         self.updatestatus('Finished installing '+name)
-        
+
     def apk(self, path):
         global adbpath
         subprocess.call((f'{adbpath} disconnect'), shell=True)
@@ -112,7 +112,7 @@ class App(tk.Frame):
             mb.showinfo('OK', 'Successfully installed ' + path)
         else:
             mb.showwarning('OK', p)
-    
+
     def installWSL(self):
         answer = tk.messagebox.askokcancel(
             title = 'Confirmation',
@@ -136,10 +136,10 @@ class App(tk.Frame):
         self.updatestatus('Downloading, windows not responding is normal. Please wait')
         download(url, 'wsa.msixbundle')
         self.updatestatus('Successfully Downloaded , installing')
-        os.system('start cmd /k powershell Add-AppxPackage -Path '+ abspath)
+        os.system('start cmd /k powershell Add-AppxPackage -Path '+ os.path.abspath('wsa.msixbundle'))
         self.updatestatus('Installed WSA')
         tk.messagebox.info('You need to enable Virtualization in bios to use WSA!')
-    
+
     def updatestatus(self, text):
         self.status.set(text)
         self.parent.update()
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     root.title('WSA toolbox')
 
     HOME = os.path.expanduser('~')
-    
+
     app = App(root)
     app.pack(side='top', fill='both', expand=True)
     root.mainloop()
